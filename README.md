@@ -17,6 +17,7 @@ Then we want to search and add the following libraries:
 
 
 You'll know if they've been sucessfully added when they look like this:
+
 ![LibrarySelection](https://github.com/lharlan/capstone-arduino/assets/75159044/c62a0c7f-9327-48bc-80e9-71b182b4eae2)
 
 
