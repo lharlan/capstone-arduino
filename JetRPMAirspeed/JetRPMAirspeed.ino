@@ -5,7 +5,8 @@
 #include <string.h>
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
-String kpa = " kPa";
+String kpa = " kPa    "; // 4 spaces to prevent overwrite
+String RPMSpace = "     "; // 5 spaces to prevent overwrite
 
 // Tachometer Setup
 unsigned long rpmtime;
@@ -18,12 +19,12 @@ void setup() {
   lcd.init();
   lcd.backlight();
 
- TCCR1A = 0;
- TCCR1B = 0;
- TCCR1B |= (1 << CS12);   //Prescaler 256
- TIMSK1 |= (1 << TOIE1);  //enable timer overflow
- pinMode(2, INPUT);
- attachInterrupt(0, RPM, FALLING);
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCCR1B |= (1 << CS12); //Prescaler 256
+  TIMSK1 |= (1 << TOIE1); //enable timer overflow
+  pinMode(2, INPUT);
+  attachInterrupt(0, RPM, FALLING);
 }
 
 ISR(TIMER1_OVF_vect) {
@@ -32,7 +33,7 @@ ISR(TIMER1_OVF_vect) {
 
 void loop() {
   
-  // Read Airspeed value
+  // Read Airspeed value and Print
   int kPaValue = analogRead(A0);
   String skPaValue = String(kPaValue);
   skPaValue = skPaValue + kpa;
@@ -40,25 +41,28 @@ void loop() {
   lcd.setCursor(0, 0);
   lcd.print("Pressure");
 
-  lcd.setCursor(3, 1);
+  lcd.setCursor(1, 1);
   lcd.print(skPaValue);
+
+  // RPM Stat and Print
 
   rpmfloat = 120 / (rpmtime/ 31250.00);
   rpm = round(rpmfloat);
+  String sRPM = String(rpm);
+  sRPM = sRPM + RPMSpace;
 
   lcd.setCursor(0, 2);
   lcd.print("RPM");
 
-  lcd.setCursor(3, 4);
-  lcd.print(rpm);
-
+  lcd.setCursor(1, 3);
+  lcd.print(sRPM);
 
   delay(1000);
 
 }
 
 void RPM () {
- rpmtime = TCNT1;
- TCNT1 = 0;
- tooslow = 0;
+  rpmtime = TCNT1;
+  TCNT1 = 0;
+  tooslow = 0;
 }
