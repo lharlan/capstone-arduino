@@ -6,7 +6,8 @@
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
 String kpa = " kPa    "; // 4 spaces to prevent overwrite
-String RPMSpace = "     "; // 5 spaces to prevent overwrite
+String RPMSpace = "      "; // 6 spaces to prevent overwrite
+// JetCat engine RPM maxes out at 154000 RPM
 
 // Tachometer Setup
 unsigned long rpmtime;
