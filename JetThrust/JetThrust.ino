@@ -6,7 +6,7 @@
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
 
-String kg = " kg";
+String kg = " kg      ";
 
 // HX711 wiring
   // Thrust scale
@@ -35,8 +35,8 @@ void setup() {
   scaleRThrust.begin(LOADCELL_RTDT_PIN, LOADCELL_RTSCK_PIN);
 
   // Set the calibration values and reset the scale to zero
-  scaleThrust.set_scale(2);
-  scaleRThrust.set_scale(2);
+  scaleThrust.set_scale(-475);
+  scaleRThrust.set_scale(-475);
   scaleThrust.tare();
 
 }
@@ -53,7 +53,7 @@ void loop() {
   srthrustVal = srthrustVal + kg;
 
   lcd.setCursor(0, 0);
-  lcd.print("Back Thrust");
+  lcd.print("Normal Thrust");
 
   lcd.setCursor(3, 1);
   lcd.print(sthrustVal);
@@ -61,9 +61,9 @@ void loop() {
   lcd.setCursor(0, 2);
   lcd.print("Reverse Thrust");
 
-  lcd.setCursor(3, 4);
+  lcd.setCursor(3, 3);
   lcd.print(srthrustVal);
 
-  delay(1000);
+  delay(2000);
 
 }
