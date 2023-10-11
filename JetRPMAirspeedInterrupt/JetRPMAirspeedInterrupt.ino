@@ -47,7 +47,7 @@ void loop() {
   // RPM Logic
   detachInterrupt(0);         //detaches the interrupt
   newtime=millis()-oldtime;   //finds the time 
-  int wings= 3;               // no of wings of rotating object, for disc object use 1 with white tape on one side
+  int wings= 23;               // no of wings of rotating object, for disc object use 1 with white tape on one side
   int RPMnew = rev/wings;
   rpm=(RPMnew/newtime)*60000; //calculates rpm
   oldtime=millis();           //saves the current time
