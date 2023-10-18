@@ -6,7 +6,7 @@
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
 
-String kg = " kg      ";
+String kg = " lbs      ";
 
 // HX711 wiring
   // Thrust scale
@@ -20,12 +20,12 @@ const int LOADCELL_RTSCK_PIN = 3;
 HX711 scaleThrust;
 HX711 scaleRThrust;
 
-int thrustVal;
-int rthrustVal;
+float thrustVal;
+float rthrustVal;
 
 void setup() {
   
-  Serial.begin(57600);
+  Serial.begin(9600);
   // Initialize the display
   lcd.init();
   lcd.backlight();
@@ -34,17 +34,20 @@ void setup() {
   scaleThrust.begin(LOADCELL_TDT_PIN, LOADCELL_TSCK_PIN);
   scaleRThrust.begin(LOADCELL_RTDT_PIN, LOADCELL_RTSCK_PIN);
 
-  // Set the calibration values and reset the scale to zero
-  scaleThrust.set_scale(-475);
-  scaleRThrust.set_scale(-475);
-  scaleThrust.tare();
+  scaleThrust.tare(); //Reset the scale to 0
+  scaleRThrust.tare(); //Reset the scale to 0
 
 }
 
 void loop() {
+
+  // Set the calibration values and reset the scale to zero
+  scaleThrust.set_scale(46000);    // 20kg scale
+  scaleRThrust.set_scale(180000);  // 5 kg scale
+  //scaleThrust.tare();
   
-  thrustVal = scaleThrust.read();
-  rthrustVal = scaleRThrust.read();
+  thrustVal = scaleThrust.get_units();
+  rthrustVal = scaleRThrust.get_units();
 
   String sthrustVal = String(thrustVal);
   String srthrustVal = String(rthrustVal);
@@ -53,7 +56,7 @@ void loop() {
   srthrustVal = srthrustVal + kg;
 
   lcd.setCursor(0, 0);
-  lcd.print("Normal Thrust");
+  lcd.print("Thrust");
 
   lcd.setCursor(3, 1);
   lcd.print(sthrustVal);
