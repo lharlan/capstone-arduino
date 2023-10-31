@@ -29,4 +29,5 @@ In order to set this up on your system either git clone this repo, or download t
 ![Screenshot_80](https://github.com/lharlan/capstone-arduino/assets/75159044/893fe27c-b5fb-4aea-a239-a8ecf2bd7d20)
 
 # RPM and Pressure Arduino
-TODO : Finish and add circuit diagram
+![RPM_Pressure_Measurement](https://github.com/lharlan/capstone-arduino/assets/75159044/08994652-4c1a-4925-ac9c-5187d585506d)
+
