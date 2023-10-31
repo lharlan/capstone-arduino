@@ -6,7 +6,9 @@
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
 
-String kg = " lbs      ";
+String lbs = " lbs      ";
+float maxT = -1.00;
+float maxRT = -1.00;
 
 // HX711 wiring
   // Thrust scale
@@ -37,6 +39,20 @@ void setup() {
   scaleThrust.tare(); //Reset the scale to 0
   scaleRThrust.tare(); //Reset the scale to 0
 
+  // Print Static Wording
+
+  lcd.setCursor(0, 0);
+  lcd.print("Thrust");
+
+  lcd.setCursor(16, 0);
+  lcd.print("Max");
+
+  lcd.setCursor(0, 2);
+  lcd.print("Reverse Thrust");
+
+  lcd.setCursor(16, 2);
+  lcd.print("Max");
+
 }
 
 void loop() {
@@ -52,20 +68,41 @@ void loop() {
   String sthrustVal = String(thrustVal);
   String srthrustVal = String(rthrustVal);
 
-  sthrustVal = sthrustVal + kg;
-  srthrustVal = srthrustVal + kg;
+  String smaxT = String(maxT);
+  String smaxRT = String(maxRT);
 
-  lcd.setCursor(0, 0);
-  lcd.print("Thrust");
+  // Finding Max Values
+
+  if sthrustVal > smaxT:
+	smaxT = sthrustVal;
+  else:
+    smaxT = smaxT:
+
+  if srthrustVal > smaxRT:
+	smaxRT = srthrustVal;
+  else:
+	smaxRT = smaxRT;
+
+  // Add "lbs" to the end of the thrust
+
+  sthrustVal = sthrustVal + lbs;
+  srthrustVal = srthrustVal + lbs;
+
+  // Normal Print
 
   lcd.setCursor(3, 1);
   lcd.print(sthrustVal);
 
-  lcd.setCursor(0, 2);
-  lcd.print("Reverse Thrust");
+  lcd.setCursor(15, 1);
+  lcd.print(smaxT);
+
+  // Reverse Print
 
   lcd.setCursor(3, 3);
   lcd.print(srthrustVal);
+
+  lcd.setCursor(15, 3);
+  lcd.print(smaxRT)
 
   delay(2000);
 
