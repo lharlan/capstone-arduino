@@ -57,10 +57,9 @@ void setup() {
 
 void loop() {
 
-  // Set the calibration values and reset the scale to zero
+  // Set the calibration values
   scaleThrust.set_scale(46000);    // 20kg scale
   scaleRThrust.set_scale(180000);  // 5 kg scale
-  //scaleThrust.tare();
   
   thrustVal = scaleThrust.get_units();
   rthrustVal = scaleRThrust.get_units();
@@ -68,20 +67,21 @@ void loop() {
   String sthrustVal = String(thrustVal);
   String srthrustVal = String(rthrustVal);
 
+  // Finding Max Values
+
+  if (thrustVal > maxT) {
+	  maxT = thrustVal; }
+  else {
+    maxT = maxT;}
+
+  if (rthrustVal > maxRT) {
+	  maxRT = rthrustVal; }
+  else {
+	  maxRT = maxRT; }
+  
   String smaxT = String(maxT);
   String smaxRT = String(maxRT);
 
-  // Finding Max Values
-
-  if sthrustVal > smaxT:
-	smaxT = sthrustVal;
-  else:
-    smaxT = smaxT:
-
-  if srthrustVal > smaxRT:
-	smaxRT = srthrustVal;
-  else:
-	smaxRT = smaxRT;
 
   // Add "lbs" to the end of the thrust
 
@@ -102,7 +102,7 @@ void loop() {
   lcd.print(srthrustVal);
 
   lcd.setCursor(15, 3);
-  lcd.print(smaxRT)
+  lcd.print(smaxRT);
 
   delay(2000);
 
