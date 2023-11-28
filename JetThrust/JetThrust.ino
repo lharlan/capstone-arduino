@@ -3,6 +3,7 @@
 #include <Wire.h> 				      // Library for I2C communication
 #include <LiquidCrystal_I2C.h> 	// Library for LCD
 #include <HX711.h> 				      // load cell library
+#include <SD.h>
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
 
@@ -10,12 +11,14 @@ String lbs = " lbs      ";
 float maxT = -1.00;
 float maxRT = -1.00;
 
-// HX711 wiring
-  // Thrust scale
+int time = 0;
+
+      // HX711 wiring
+// Thrust scale
 const int LOADCELL_TDT_PIN = 6;
 const int LOADCELL_TSCK_PIN = 7;
 
-  // Reverse thrust scale
+// Reverse thrust scale
 const int LOADCELL_RTDT_PIN = 4;
 const int LOADCELL_RTSCK_PIN = 3;
 
@@ -24,6 +27,10 @@ HX711 scaleRThrust;
 
 float thrustVal;
 float rthrustVal;
+
+File thrustFile;
+File rThrustFile;
+File timeFile;
 
 void setup() {
   
@@ -53,6 +60,55 @@ void setup() {
   lcd.setCursor(16, 2);
   lcd.print("Max");
 
+  // Initialize SD Card to PIN 1
+
+  //if (!SD.begin(1)) {
+  //  Serial.println("initialization failed!");
+  //  while (1);
+  //}
+
+  if(!SD.begin(2)) {
+    Serial.println("initialization failed!");
+    return;
+  }
+  Serial.println("initialization done.");
+
+}
+
+void logThrust(float maxT) {
+
+  String sthrustVal = String(thrustVal);
+
+  File myFile = SD.open("thrust.txt", FILE_WRITE);
+  if (myFile) {
+    Serial.println("Opened thrust with success.");
+    myFile.print(sthrustVal + ",");
+  }
+  myFile.close();
+}
+
+void logReverse(float smaxRT) {
+
+  String srthrustVal = String(rthrustVal);
+
+  File myFile = SD.open("rthrust.txt", FILE_WRITE);
+  if (myFile) {
+    Serial.println("Opened reverse with success.");
+    myFile.print(srthrustVal + ",");
+  }
+  myFile.close();
+}
+
+void logTime (int time) {
+
+  String stime = String(time);
+
+  File myFile = SD.open("time.txt", FILE_WRITE);
+  if (myFile) {
+    Serial.println("Opened time with success.");
+    myFile.print(stime + ",");
+  }
+  myFile.close();
 }
 
 void loop() {
@@ -64,8 +120,16 @@ void loop() {
   thrustVal = scaleThrust.get_units();
   rthrustVal = scaleRThrust.get_units();
 
+  // SD Card Writing
+  logThrust(thrustVal);
+  logReverse(rthrustVal);
+  logTime(time);
+
+  time = time + 1;
+
   String sthrustVal = String(thrustVal);
   String srthrustVal = String(rthrustVal);
+  String stime = String(time);
 
   // Finding Max Values
 
@@ -81,7 +145,6 @@ void loop() {
   
   String smaxT = String(maxT);
   String smaxRT = String(maxRT);
-
 
   // Add "lbs" to the end of the thrust
 
