@@ -26,7 +26,8 @@ In order to set this up on your system either git clone this repo, or download t
 (Arduino folder can be found under `~/Aruino/` if you are on a Linux based system or `C:\Users\youruser\Documents\Arduino` on Windows once you've installed the Arduino IDE.)
 
 # Thrust Measurement Arduino
-![Screenshot_80](https://github.com/lharlan/capstone-arduino/assets/75159044/893fe27c-b5fb-4aea-a239-a8ecf2bd7d20)
+![ThrustArduinoCircuit](https://github.com/lharlan/capstone-arduino/assets/75159044/d3eac94b-a68c-4052-8a3f-34ed91c812a3)
+
 
 # RPM and Pressure Arduino
 ![RPM_Pressure_Measurement](https://github.com/lharlan/capstone-arduino/assets/75159044/08994652-4c1a-4925-ac9c-5187d585506d)
