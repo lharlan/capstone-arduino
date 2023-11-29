@@ -5,31 +5,24 @@
 #include <string.h>
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
+
 String kpa = " kPa    "; // 4 spaces to prevent overwrite
-String RPMSpace = "      "; // 6 spaces to prevent overwrite
+String RPMSpace = "       "; // 7 spaces to prevent overwrite
 // JetCat engine RPM maxes out at 154000 RPM
 
 // Tachometer Setup
-unsigned long rpmtime;
-float rpmfloat;
-unsigned int rpm;
-bool tooslow = 1;
+int rpm = 0;
+unsigned long millisBefore;
+volatile int objects;
+
 
 void setup() {
   // Initialize the display
   lcd.init();
   lcd.backlight();
 
-  TCCR1A = 0;
-  TCCR1B = 0;
-  TCCR1B |= (1 << CS12); //Prescaler 256
-  TIMSK1 |= (1 << TOIE1); //enable timer overflow
+  attachInterrupt(digitalPinToInterrupt(2), count, FALLING);
   pinMode(2, INPUT);
-  attachInterrupt(0, RPM, FALLING);
-}
-
-ISR(TIMER1_OVF_vect) {
- tooslow = 1;
 }
 
 void loop() {
@@ -45,12 +38,16 @@ void loop() {
   lcd.setCursor(1, 1);
   lcd.print(skPaValue);
 
-  // RPM Stat and Print
+  if (millis() - millisBefore > 1000) {
+    rpm = (objects / 3.0)*60;
+    objects = 0;
+    millisBefore = millis();
+  }
 
-  rpmfloat = 120 / (rpmtime/ 31250.00);
-  rpm = round(rpmfloat);
   String sRPM = String(rpm);
   sRPM = sRPM + RPMSpace;
+
+  delay(100);
 
   lcd.setCursor(0, 2);
   lcd.print("RPM");
@@ -58,12 +55,13 @@ void loop() {
   lcd.setCursor(1, 3);
   lcd.print(sRPM);
 
+
   delay(1000);
 
 }
 
-void RPM () {
-  rpmtime = TCNT1;
-  TCNT1 = 0;
-  tooslow = 0;
+void count() {
+  objects++;
 }
+
+

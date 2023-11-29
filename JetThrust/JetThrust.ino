@@ -35,16 +35,31 @@ File timeFile;
 void setup() {
   
   Serial.begin(9600);
+  Serial.println("Booting...");
   // Initialize the display
   lcd.init();
   lcd.backlight();
 
   // Initialize the Load Cells
+  Serial.println("Initializing the load cells...");
   scaleThrust.begin(LOADCELL_TDT_PIN, LOADCELL_TSCK_PIN);
   scaleRThrust.begin(LOADCELL_RTDT_PIN, LOADCELL_RTSCK_PIN);
 
   scaleThrust.tare(); //Reset the scale to 0
   scaleRThrust.tare(); //Reset the scale to 0
+
+  // Initialize SD Card to PIN 1
+
+  //if (!SD.begin(1)) {
+  //  Serial.println("initialization failed!");
+  //  while (1);
+  //}
+
+  if(!SD.begin(2)) {
+    Serial.println("SD initialization failed.");
+    return;
+  }
+  Serial.println("SD initialization done...");
 
   // Print Static Wording
 
@@ -59,19 +74,6 @@ void setup() {
 
   lcd.setCursor(16, 2);
   lcd.print("Max");
-
-  // Initialize SD Card to PIN 1
-
-  //if (!SD.begin(1)) {
-  //  Serial.println("initialization failed!");
-  //  while (1);
-  //}
-
-  if(!SD.begin(2)) {
-    Serial.println("initialization failed!");
-    return;
-  }
-  Serial.println("initialization done.");
 
 }
 
